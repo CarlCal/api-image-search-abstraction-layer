@@ -1,6 +1,6 @@
 
-const bodyParser =require("body-parser")
 const express = require("express")
+const moment = require("moment")
 const wreck = require('wreck')
 
 const baseURL = "https://www.googleapis.com/customsearch/v1?"
@@ -8,35 +8,72 @@ const key = "key=AIzaSyBXZa1FK9G0f4PAgcw01BkTjCzUseE8gko&" //process.env.KEY
 const id = "cx=003782819325232296874:b-cwzuxa1is&" //process.env.ID
 const options = "&searchType=image&linkSite&"
 
-router = express.Router()
+var mongo = require("../db")
+
+var router = express.Router()
+
+function sizeControll() {
+	mongo.db.collection("images")
+		.find()
+		.toArray((err, arr) => {
+			if (err) throw err
+
+			if (arr.length > 10)
+				mongo.db.collection("images")
+					.find().sort({_id:+1}).toLimit(1).remove().exec((err, data) => {
+						if (err) throw err
+
+						console.log(data)
+					})
+		})
+}
 
 router
-	.use(bodyParser.json())
 	.get("/", (req, res) => {
 		res.send("add search terms as a parameters with %25 as seperators")
 	})
 	.get("/:search", (req, res) => {
 		var offset = parseInt(req.query["offset"], 10)
 		var start = "start=" + ((offset < 2) ? 1 : ((offset - 1) * 10) + 1)
-		var searchTerms = "q="+req.params["search"].split("%").join("+")+"&"
+		var searchTerms = "q=" + req.params["search"].split("%").join("+") + "&"
 		
 		var url = baseURL+key+id+searchTerms+options+start
 
 		wreck.request("GET", url, true, (err, body) => {
 			wreck.read(body, {'json': true}, (err, result) => {
-				res.send(result)
+				if(err) throw err
+
+				var final = []
+				var time = {
+					term: result["queries"]["request"][0]["searchTerms"],
+					when: moment().toISOString()			
+				}
+
+				mongo.db.collection("images")
+					.insert(time, (err, done) => {
+						if(err) throw err
+
+						if(!done) {
+							res.send("Could't log the time")
+						}
+
+					 sizeControll()
+					})
+
+				for (var i = 0; i < result["items"].length; i++) {
+					var image = {
+						url: result["items"][i]["link"],
+						snippet: result["items"][i]["snippet"],
+						thumbnail: result["items"][i]["image"]["thumbnailLink"],
+						context: result["items"][i]["image"]["contextLink"]
+					}; final.push(image)
+
+					if (i === result["items"].length - 1) {
+						res.send(final)
+					}
+				}
 			})
 		})
 	})
 	
 module.exports = router
-
-//item
-	//link 											"url"
-	//snippet										"snippet"
-	//image, thumbnailLink			"thumbnail"
-	//image, contextLink				"context"
-
-//latest search
-	//quesries, request, search terms "term"
-	//current date full date and time	"when"

@@ -1,11 +1,17 @@
 
 const express = require("express")
 
-router = express.Router()
+var mongo = require("../db")
+
+var router = express.Router()
 
 router
 	.get("/", (req, res) => {
-		res.send("latest/imagesearch")
+		mongo.db.collection("images")
+			.find()
+			.toArray((err, searches) => {
+				res.send(searches)
+			})
 	})
 
 module.exports = router
