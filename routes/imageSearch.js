@@ -14,7 +14,7 @@ var router = express.Router()
 
 router
 	.get("/", (req, res) => {
-		res.send("add search terms as a parameters with %25 as seperator")
+		res.send("Add search terms in the url, separated with %25 and ending with a offset query")
 	})
 	.get("/:search", (req, res) => {
 		var offset = parseInt(req.query["offset"], 10)
@@ -30,7 +30,7 @@ router
 				var final = []
 				var time = {
 					term: result["queries"]["request"][0]["searchTerms"],
-					when: moment().toISOString()			
+					when: moment().toISOString()+" (GMT)"			
 				}
 
 				mongo.db.collection("images")
