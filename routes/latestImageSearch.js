@@ -10,7 +10,15 @@ router
 		mongo.db.collection("images")
 			.find()
 			.toArray((err, searches) => {
-				res.send(searches)
+				if (err) throw err
+
+				for (var i = 0; i < 10; i++) {
+					delete searches[i]["_id"]
+					
+					if (i === (10 - 1)) {
+						res.send(searches.reverse())
+					}
+				}
 			})
 	})
 

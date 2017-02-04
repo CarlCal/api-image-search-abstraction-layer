@@ -12,25 +12,9 @@ var mongo = require("../db")
 
 var router = express.Router()
 
-function sizeControll() {
-	mongo.db.collection("images")
-		.find()
-		.toArray((err, arr) => {
-			if (err) throw err
-
-			if (arr.length > 10)
-				mongo.db.collection("images")
-					.find().sort({_id:+1}).toLimit(1).remove().exec((err, data) => {
-						if (err) throw err
-
-						console.log(data)
-					})
-		})
-}
-
 router
 	.get("/", (req, res) => {
-		res.send("add search terms as a parameters with %25 as seperators")
+		res.send("add search terms as a parameters with %25 as seperator")
 	})
 	.get("/:search", (req, res) => {
 		var offset = parseInt(req.query["offset"], 10)
@@ -54,10 +38,8 @@ router
 						if(err) throw err
 
 						if(!done) {
-							res.send("Could't log the time")
+							res.send("Could't log the search")
 						}
-
-					 sizeControll()
 					})
 
 				for (var i = 0; i < result["items"].length; i++) {
