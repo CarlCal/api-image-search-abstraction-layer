@@ -13,19 +13,20 @@
 				<h4>Description:</h4> 
 				<p>This microservice gives you the ability to serach for images on the web via a custom search engine from google. After <b>/api/imagesearch/</b> simply add the terms you want to serach for (with %25 as a seporator) and end with the query <b>?offset="integer"</b> which will allow you to paginate through the result. The result will give you an array of 10 objects and each object will have:
 				<ul>
-					<li>the url to an image matching the serach term</li>
-					<li>a snippet of a paragraph from the origninal page</li>
-					<li>a link to to thumbnail of hte image in question</li>
-					<li>a link to the original site whre the image was published</li>
+					<li>The link to an image matching the serach terms</li>
+					<li>A snippet of the alternate text from the image</li>
+					<li>A link to a thumbnail of the image in question</li>
+					<li>A link to the original site from where the image was uploaded</li>
 				</ul></p>
-				<p>You can also look through the most recent searches done by any user if you type in <b>/api/latest/imageserach</b>. The result includes an array of ten objects, each contaning the term the user searched for plus the timestamp of when the search was made.</p>
+				<p>You can also look through the most recent searches done by any user if you type in <b>/api/latest/imageserach</b>. Here you will se an array of ten objects, each contaning the term the user searched for plus the timestamp of when the search was made.</p>
 				<br>
+
 				<h4>Image Search:</h4>
-				<p class="bg-info">https://carlcal-image-search-ms.herokuapp.com/api/imagesearch/funny%25cats?offset=2</p>
-				<p class="bg-danger">[{ url: url link, snippet: site snipper, thubmnail: thumbnail url, context: origninal url } ... ]</p>
+				<p class="bg-info">https://carlcal-image-search-ms.herokuapp.com/api/imagesearch/funny%25cat?offset=2</p>
+				<p class="bg-danger">[ { url: https://i.ytimg.com/vi/ZGl8vrceu1E/hqdefault.jpg, snippet: Funny CATS guaranteed to make ..., thubmnail: https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRIeUTpFQpjYy_ApSprMxye7pPYuefnPYReQK0318tAEBD2Cl8GpQh2HYI, context: http://www.boredpanda.com/funny-cat-fails/ } ... ]</p>
 				<h4>Search History:</h4>
 				<p class="bg-info">https://carlcal-image-search-ms.heokuapp/api/latest/imagesearch/</p>
-				<p class="bg-danger">[{ term: funny cats, when: timestamp } ... ]</p>
+				<p class="bg-danger">[ { term: funny cat, when: 2017-02-04T12:47:39.376Z } ... ]</p>
 			</div>
 		</div>
 	</body>

@@ -13,4 +13,7 @@ app
 	.use(bodyParser.json())
 	.use("/", index)
 	.use("/api", api)
+	.get("*", (req, res) => {
+		res.redirect("/")
+	})
 	.listen(port)

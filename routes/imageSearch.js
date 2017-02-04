@@ -4,8 +4,8 @@ const moment = require("moment")
 const wreck = require('wreck')
 
 const baseURL = "https://www.googleapis.com/customsearch/v1?"
-const key = "key=AIzaSyBXZa1FK9G0f4PAgcw01BkTjCzUseE8gko&" //process.env.KEY
-const id = "cx=003782819325232296874:b-cwzuxa1is&" //process.env.ID
+const key = "key="+process.env.KEY+"&"
+const id = "cx="+process.env.ID+"&"
 const options = "&searchType=image&linkSite&"
 
 var mongo = require("../db")
